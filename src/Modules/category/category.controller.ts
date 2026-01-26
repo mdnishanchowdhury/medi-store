@@ -12,6 +12,22 @@ const createCategory = async (req: Request, res: Response, next: NextFunction) =
 }
 
 
+const getAllCategories = async (req: Request, res: Response) => {
+    try {
+        const categories = await categoryService.getAllCategories();
+        res.status(200).json({
+            success: true,
+            data: categories,
+        });
+    } catch (error) {
+        res.status(400).json({
+            error: "Category creation failed",
+            details: error
+        })
+    }
+};
+
 export const categoryController = {
     createCategory,
+    getAllCategories
 }
