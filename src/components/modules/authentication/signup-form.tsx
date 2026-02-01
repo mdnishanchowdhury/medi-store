@@ -21,6 +21,7 @@ const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.email(),
   password: z.string().min(6, "Password must be at least 6 characters"),
+  role: z.enum(["CUSTOMER", "SELLER"]),
 });
 
 
@@ -38,7 +39,8 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
     defaultValues: {
       name: "",
       email: "",
-      password: ""
+      password: "",
+      role: "CUSTOMER"
     },
     validators: {
       onSubmit: formSchema,
@@ -144,6 +146,36 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
               );
             }}
           />
+
+          <form.Field
+            name="role"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+
+              return (
+                <Field>
+                  <FieldLabel htmlFor={field.name}>Role</FieldLabel>
+
+                  <select
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    className="w-full border rounded px-3 py-2 dark:bg-black"
+                  >
+                    <option value="CUSTOMER">Customer</option>
+                    <option value="SELLER">Seller</option>
+                  </select>
+
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          />
+
+
+
         </FieldGroup>
       </form>
 
