@@ -38,18 +38,20 @@ export function CartDropdown() {
 
         toast.promise(handleOrderAction(items, address, phone), {
             loading: 'Processing your order...',
+            // handleCheckout ফাংশনের ভেতর success পার্টটি এভাবে আপডেট করুন:
             success: (res) => {
-                if (res.error) {
-                    throw new Error(res.error);
-                }
+                if (res.error) throw new Error(res.error);
 
                 clearCart();
 
+                // API থেকে আসা অর্ডারের আইডি
+                const orderId = res.data.id || res.data._id;
+
                 setTimeout(() => {
-                    router.push("/orders");
+                    router.push(`/track/${orderId}`); // ডাইনামিক ট্র্যাকিং পেজে রিডাইরেক্ট
                 }, 1500);
 
-                return "Order successful! Redirecting to tracking...";
+                return "অর্ডার সফল হয়েছে! ট্র্যাকিং পেজে নিয়ে যাওয়া হচ্ছে...";
             },
             error: (err) => {
                 return `Order failed: ${err.message}`;
@@ -136,7 +138,6 @@ export function CartDropdown() {
                             <Button
                                 variant="outline"
                                 className="w-full rounded-xl gap-2"
-                                onClick={() => router.push("/orders")}
                             >
                                 <PackageSearch className="size-4" />
                                 Order Tracking

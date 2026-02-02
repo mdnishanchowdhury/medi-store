@@ -65,8 +65,8 @@ const Navbar1 = ({
   menu = [
     { title: "Home", url: "/" },
     {
-      title: "Store",
-      url: "/store",
+      title: "My Orders",
+      url: "/myOrder",
     },
     {
       title: "About",
