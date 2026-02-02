@@ -11,5 +11,7 @@ router.post("/orders", auth(UserRole.CUSTOMER), ordersController.createOrder);
 
 // Seller
 router.get("/seller/orders", auth(UserRole.SELLER), ordersController.getSellerOrders);
+router.patch("/seller/orders/:id", auth(UserRole.SELLER), ordersController.updateOrderStatus);
+
 
 export const orderRouter = router;

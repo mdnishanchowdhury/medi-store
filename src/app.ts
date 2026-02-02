@@ -5,6 +5,8 @@ import { auth } from "./lib/auth";
 import cors from 'cors';
 import { medicineRouter } from "./Modules/medicine/medicine.route";
 import { orderRouter } from "./Modules/order/order.route";
+import { notFount } from "./middlewares/notFount";
+import errorHandler from "./middlewares/globalErrorHandler";
 
 const app = express();
 
@@ -14,6 +16,7 @@ app.use(cors({
 }))
 
 app.all('/api/auth/*splat', toNodeHandler(auth));
+
 app.use(express.json());
 
 app.use("/category", categoryRouter);
@@ -26,4 +29,6 @@ app.get("/", (req, res) => {
     res.send("Hello Word!");
 })
 
+app.use(notFount)
+app.use(errorHandler)
 export default app;

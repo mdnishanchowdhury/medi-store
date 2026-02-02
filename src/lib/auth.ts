@@ -17,11 +17,12 @@ export const auth = betterAuth({
     database: prismaAdapter(prisma, {
         provider: "postgresql",
     }),
+    trustedOrigins: [process.env.APP_URL!],
     user: {
         additionalFields: {
             role: {
                 type: "string",
-                defaultValue: "SELLER",
+                defaultValue: "CUSTOMER",
                 required: false
             },
             phone: {
@@ -37,6 +38,7 @@ export const auth = betterAuth({
     },
     emailAndPassword: {
         enabled: true,
+         requireEmailVerification: true,
     },
     emailVerification: {
         sendOnSignIn: true,
@@ -44,10 +46,10 @@ export const auth = betterAuth({
         sendVerificationEmail: async ({ user, url, token }, request) => {
 
             try {
-                const verificationUrl = `${process.env.APP_URL}/verify-email?tokem=${token}`
+                const verificationUrl = `${process.env.APP_URL}/verify-email?token=${token}`
 
                 const info = await transporter.sendMail({
-                    from: `"Prisma Blog" <${process.env.EMAIL_USER}>`,
+                    from: `"MEDI STORE" <${process.env.EMAIL_USER}>`,
                     to: user.email,
                     subject: "Verify your email",
                     html: `

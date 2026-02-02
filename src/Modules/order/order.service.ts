@@ -4,6 +4,7 @@ import { prisma } from "../../lib/prisma";
 const createOrder = async (data: {
     customerId: string;
     shippingAddress: string;
+    phoneNumber: string;
     items: {
         medicineId: string;
         sellerId: string;
@@ -19,6 +20,7 @@ const createOrder = async (data: {
         data: {
             customerId: data.customerId,
             shippingAddress: data.shippingAddress,
+            phoneNumber: data.phoneNumber,
             totalAmount,
             status: OrderStatus.PLACED,
             orderItems: {
@@ -70,25 +72,41 @@ const getOrderById = async (orderId: string, userId: string) => {
 
 
 const getSellerOrders = async () => {
-  const orders = await prisma.order.findMany({
-    include: {
-      orderItems: {
+    const orders = await prisma.order.findMany({
         include: {
-          medicine: true,
+            orderItems: {
+                include: {
+                    medicine: true,
+                },
+            },
         },
-      },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+        orderBy: { createdAt: "desc" },
+    });
 
-  return orders;
+    return orders;
 };
 
+const updateOrderStatus = async (orderId: string, sellerId: string, status: OrderStatus) => {
+    // Shudhu check kora je order-ti database-e ache kina
+    const orderExists = await prisma.order.findUnique({
+        where: { id: orderId }
+    });
 
+    if (!orderExists) {
+        throw new Error("Order not found!");
+    }
+
+    // Direct update (Verification chhara testing-er jonno)
+    return prisma.order.update({
+        where: { id: orderId },
+        data: { status }
+    });
+};
 
 export const ordersService = {
     createOrder,
     getMyOrders,
     getOrderById,
-    getSellerOrders
+    getSellerOrders,
+    updateOrderStatus
 };

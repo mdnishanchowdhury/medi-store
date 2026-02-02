@@ -7,21 +7,21 @@ const createOrder = async (req: Request, res: Response) => {
             return res.status(401).json({ message: "Unauthorized" });
         }
 
-        const { shippingAddress, items } = req.body;
+        const { shippingAddress, items, phoneNumber } = req.body;
 
-        if (!shippingAddress || !items?.length) {
+        if (!shippingAddress || !items?.length || !phoneNumber) {
             return res.status(400).json({
                 success: false,
-                message: "Shipping address and items are required",
+                message: "Shipping address, phone number and items are required",
             });
         }
 
         const order = await ordersService.createOrder({
             customerId: req.user.id,
             shippingAddress,
+            phoneNumber,
             items,
         });
-
 
         res.status(201).json({
             success: true,
@@ -34,6 +34,7 @@ const createOrder = async (req: Request, res: Response) => {
         });
     }
 };
+
 
 const getMyOrders = async (req: Request, res: Response) => {
     try {
@@ -121,10 +122,41 @@ const getSellerOrders = async (req: Request, res: Response) => {
 };
 
 
+const updateOrderStatus = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        if (!req.user || req.user.role !== 'SELLER') {
+            return res.status(403).json({
+                success: false,
+                message: "Only a seller can update the order status",
+            });
+        }
+
+        const result = await ordersService.updateOrderStatus(
+            id as string,
+            req.user.id,
+            status
+        );
+
+        res.status(200).json({
+            success: true,
+            message: `Order status updated to ${status}`,
+            data: result,
+        });
+    } catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
 
 export const ordersController = {
     createOrder,
     getMyOrders,
     getOrderById,
-    getSellerOrders
+    getSellerOrders,
+    updateOrderStatus
 };
