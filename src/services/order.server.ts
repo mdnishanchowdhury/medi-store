@@ -33,4 +33,23 @@ export const orderService = {
             return { data: null, error: error.message };
         }
     },
+
+    getOrderById: async function (orderId: string) {
+        try {
+            const cookiesStore = await cookies();
+            const res = await fetch(`${API_URL}/api/orders/${orderId}`, {
+                headers: {
+                    cookie: cookiesStore.toString(),
+                },
+                cache: "no-store",
+            });
+
+            const result = await res.json();
+            if (!res.ok) throw new Error(result.message || "Failed to fetch order");
+
+            return { data: result.data, error: null };
+        } catch (error: any) {
+            return { data: null, error: error.message };
+        }
+    },
 };

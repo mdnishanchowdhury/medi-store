@@ -4,29 +4,27 @@ import { orderService } from "@/services/order.server";
 import { revalidateTag } from "next/cache";
 
 export async function handleOrderAction(
-    medicineId: string,
-    price: number,
-    sellerId: string,
-    quantity: number,
-    shippingAddress: string
+    items: any[],
+    shippingAddress: string,
+    phoneNumber: string
 ) {
     const orderData = {
         shippingAddress: shippingAddress,
-        items: [
-            {
-                medicineId: medicineId,
-                quantity: quantity,
-                price: Number(price),
-                sellerId: sellerId,
-            },
-        ],
+        phoneNumber: phoneNumber,
+        items: items.map((item: any) => ({
+            medicineId: item.id || item._id,
+            quantity: item.qty,
+            price: Number(item.price),
+            sellerId: item.sellerId || "default_seller_id",
+        })),
     };
 
     const res = await orderService.createOrder(orderData);
-
     if (res.data) {
+        // revalidateTag('orders'); 
         revalidateTag('orders', '');
     }
 
     return res;
 }
+

@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { mediService } from "@/services/medi.server";
 import { Medicine } from "@/types/medi.service";
 import {
-    ShoppingCart,
     MessageSquare,
     Building2,
     Pill,
@@ -29,9 +28,10 @@ export default async function MedicinePage({
     const { data: medicine } = await mediService.getMedicinesById(id);
     const medi: Medicine = medicine.data;
     const { data: session, } = await userService.getSession();
-    const sellerId = session.user.id
-    const quantity = 2;
-    const shippingAddress ="Dhaka";
+    const sellerId = session.user.id;
+    const shippingAddress = "Dhaka";
+    const phoneNumber = "01739061573";
+
     return (
         <div className="w-full max-auto bg-white rounded-[3rem] shadow-2xl shadow-slate-200/50 overflow-hidden border border-slate-100">
             <div className="container mx-auto">
@@ -100,13 +100,17 @@ export default async function MedicinePage({
                         </div>
 
                         <div className="flex flex-col sm:flex-row gap-4">
-                            {/* <Button
-                            onClick={handleOrder}
-                            className="flex-1 h-14 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-md shadow-lg shadow-blue-200 transition-all active:scale-95">
-                                <ShoppingCart className="mr-2 h-5 w-5" /> Order Now
-                            </Button> */}
 
-                            <OrderButtons shippingAddress={shippingAddress} quantity={quantity} sellerId={sellerId} medicineId={medi.id} price={medi.price}></OrderButtons>
+                            <OrderButtons
+                                medicineId={medi.id}
+                                name={medi.name}     
+                                price={medi.price}
+                                image={medi.image}  
+                                sellerId={sellerId}
+                                phoneNumber={phoneNumber}
+                                shippingAddress={shippingAddress}
+                            />
+
                             <Button variant="outline" className="flex-1 h-14 rounded-2xl border-slate-200 bg-slate-900 text-black font-bold text-md hover:bg-black transition-all">
                                 <MessageSquare className="mr-2 h-5 w-5" /> Inquire Now
                             </Button>

@@ -6,18 +6,13 @@ import { cn } from "@/lib/utils";
 
 import {
   Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import {
   Sheet,
@@ -28,6 +23,7 @@ import {
 } from "@/components/ui/sheet";
 import Link from "next/link";
 import { ModeToggle } from "./ModeToggle";
+import { CartDropdown } from "../modules/cart/CartDropdown";
 
 interface MenuItem {
   title: string;
@@ -113,7 +109,9 @@ const Navbar1 = ({
             </div>
           </div>
           <div className="flex gap-2">
-             <ModeToggle></ModeToggle>
+            {/* <ShoppingCart1></ShoppingCart1> */}
+            <CartDropdown></CartDropdown>
+            <ModeToggle></ModeToggle>
             <Button asChild variant="outline" size="sm">
               <a href={auth.login.url}>{auth.login.title}</a>
             </Button>
@@ -162,6 +160,10 @@ const Navbar1 = ({
                   </Accordion>
 
                   <div className="flex flex-col gap-3">
+
+                    <CartDropdown></CartDropdown>
+
+
                     <ModeToggle></ModeToggle>
                     <Button asChild variant="outline">
                       <a href={auth.login.url}>{auth.login.title}</a>
