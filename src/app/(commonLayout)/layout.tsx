@@ -1,25 +1,19 @@
-"use client";
+import { Category, categoryService } from "@/services/category.server";
+import { LayoutWrapper } from "./ClientWrapper";
 
-import React from "react";
-import { Navbar1 } from "@/components/layout/navbar1";
-import { Footer2 } from "@/components/layout/footer2";
-import { usePathname } from "next/navigation";
+export default async function CommonLayout({ children }: { children: React.ReactNode }) {
+    let categories: Category[] = [];
 
-export default function CommonLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
-    const pathname = usePathname();
-
-    const hideLayoutPages = ["/login", "/signup"];
-    const hideLayout = hideLayoutPages.includes(pathname);
+    try {
+        const { data } = await categoryService.getCategories({ cache: "no-store" });
+        categories = data ?? [];
+    } catch (error) {
+        categories = [];
+    }
 
     return (
-        <div>
-            {!hideLayout && <Navbar1 />}
+        <LayoutWrapper initialCategories={categories}>
             {children}
-            {!hideLayout && <Footer2 />}
-        </div>
+        </LayoutWrapper>
     );
 }

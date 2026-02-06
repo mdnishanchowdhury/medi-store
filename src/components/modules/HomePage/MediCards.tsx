@@ -44,9 +44,8 @@ const MediCard: React.FC<MediCardProps> = ({ medicine }) => {
           ${medicine.price}
         </span>
         <span
-          className={`text-sm font-medium ${
-            medicine.stock > 0 ? "text-blue-600 dark:text-blue-400" : "text-red-600 dark:text-red-400"
-          }`}
+          className={`text-sm font-medium ${medicine.stock > 0 ? "text-blue-600 dark:text-blue-400" : "text-red-600 dark:text-red-400"
+            }`}
         >
           {medicine.stock > 0 ? `${medicine.stock} in stock` : "Out of stock"}
         </span>
@@ -58,17 +57,16 @@ const MediCard: React.FC<MediCardProps> = ({ medicine }) => {
       </div>
 
       {/* Action Button */}
-       <Link href={`/medicine/${medicine.id}`}>
-      <button
-        disabled={!medicine.isActive || medicine.stock <= 0}
-        className={`w-full py-2 px-4 rounded-lg text-white font-medium transition ${
-          medicine.isActive && medicine.stock > 0
-            ? "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
-            : "bg-gray-400 cursor-not-allowed"
-        }`}
-      >
-        {medicine.isActive && medicine.stock > 0 ? "Buy Now" : "Unavailable"}
-      </button>
+      <Link href={`/medicine/${medicine.id}`}>
+        <button
+          disabled={!medicine.isActive || medicine.stock <= 0}
+          className={`w-full py-2 px-4 rounded-lg text-white font-medium transition ${medicine.isActive && medicine.stock > 0
+              ? "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+              : "bg-gray-400 cursor-not-allowed"
+            }`}
+        >
+          {medicine.isActive && medicine.stock > 0 ? "Buy Now" : "Unavailable"}
+        </button>
       </Link>
     </div>
   );
